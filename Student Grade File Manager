@@ -1,0 +1,56 @@
+# Student Grade File Manager
+# Reads student data from CSV, computes grades,
+# and writes results to a new CSV file.
+
+import csv
+
+INPUT_FILE = "students.csv"
+OUTPUT_FILE = "results.csv"
+
+# Function to calculate grade
+def calculate_grade(marks):
+    if marks >= 90:
+        return "A+"
+    elif marks >= 80:
+        return "A"
+    elif marks >= 70:
+        return "B"
+    elif marks >= 60:
+        return "C"
+    elif marks >= 50:
+        return "D"
+    else:
+        return "F"
+
+def process_students():
+    try:
+        with open(INPUT_FILE, "r", newline="") as infile:
+            reader = csv.reader(infile)
+
+            with open(OUTPUT_FILE, "w", newline="") as outfile:
+                writer = csv.writer(outfile)
+
+                # Header
+                writer.writerow(["Roll No", "Name", "Marks", "Grade"])
+
+                next(reader)  # Skip input header
+
+                for row in reader:
+                    roll_no = row[0]
+                    name = row[1]
+                    marks = float(row[2])
+
+                    grade = calculate_grade(marks)
+
+                    writer.writerow([roll_no, name, marks, grade])
+
+        print("Results generated successfully!")
+        print("Output saved in", OUTPUT_FILE)
+
+    except FileNotFoundError:
+        print("Input CSV file not found!")
+
+    except ValueError:
+        print("Invalid marks found in file!")
+
+process_students()
